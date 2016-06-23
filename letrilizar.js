@@ -10,6 +10,7 @@ var Letrilizar = {
         imageSrcPrefix: 'images/',
         formatText: true,
         maxChars: 800,
+        changeImage: '.change-image',
         triggerOn: 'selection'
     },
     letrilizar: function(options) {
@@ -23,6 +24,7 @@ var Letrilizar = {
         	this.handleSelection();
         } else {
         	$(this.options.triggerOn).on('click', function(e){
+        		that.changeImage();
         		that.newCanvasOnElement();
         		return false;	
         	});
@@ -32,12 +34,15 @@ var Letrilizar = {
     newCanvasOnElement: function(){
     	var txtGenerated = $('#generated-text').val();
     	var element = $('.letrilizar-canvas-content-image');
+    	
     	this.balloonInstance.initialize(element);
     	this.balloonInstance.letra = this;
     	this.balloonInstance.text = txtGenerated;
+    	this.balloonInstance.style = LetrilizarStyles[0];
     	this.balloonInstance.draw(txtGenerated);
     	this.balloonInstance.show(true);
     	this.balloonInstance.togglePreview(true);
+    	
     },
     styleChooser: function() {
     	var that = this;
@@ -95,6 +100,35 @@ var Letrilizar = {
         offset.left += scrollLeft;
         this.balloonInstance.text = selection.formatedText;
         this.balloonInstance.floatAt(offset);
+    },
+    changeImage: function(balloon) {
+    	var that = this;
+    	var balloon = this.balloonInstance;
+    	$(this.options.changeImage).on("change", function(e) {
+	    	var ctx = balloon.canvas[0].getContext("2d");
+	    	
+			var reader = new FileReader();
+			var file = e.target.files[0];
+			// load to image to get it's width/height
+			var img = new Image();
+			img.onload = function() {
+				// scale canvas to image
+				//ctx.canvas.width = img.width;
+				//ctx.canvas.height = img.height;
+				// draw image
+				ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
+				
+			}
+			// this is to setup loading the image
+			reader.onloadend = function() {
+				img.src = reader.result;
+			}
+			// this is to read the file
+			reader.readAsDataURL(file); 
+
+	    	
+
+		});
     }
 };
 
@@ -119,6 +153,8 @@ var ActionBalloon = {
         	this.el.addClass('letrilizar-action-balloon--static');
         	
         }
+        
+        this.canvas = this.el.find('canvas');
         
         this.el.find('.letrilizar-buttons').on('click', function() { 
             if (!that.previewIsOpen()) {
@@ -176,7 +212,9 @@ var ActionBalloon = {
         this.el.find('.letrilizar-status').html(text);
     },
     draw: function(text) {
-        var canvas = this.el.find('canvas');
+        var canvas = this.canvas;
+        var ctx = canvas[0].getContext("2d");
+        
         var subtitle1 = this.letra.options['subtitle1'];
         var subtitle2 = this.letra.options['subtitle2'];
         canvasText = text || this.text;

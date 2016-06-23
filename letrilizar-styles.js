@@ -2,6 +2,8 @@
 
 var LetrilizarStyles = LetrilizarStyles || [];
 
+var LetrilizarTemplates = LetrilizarTemplates || [];
+
 (function() {
     
     var getCT = function(canvas, context) {
@@ -92,11 +94,54 @@ var LetrilizarStyles = LetrilizarStyles || [];
     };
     
     LetrilizarStyles.push({
-        name: 'quote-1',
+        name: 'no-bg',
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context); 
-
+            
+            context.globalCompositeOperation = 'destination-over';
+           	
+            CT.context.clearRect(0, 0, canvas.width, canvas.height);
+            var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 470, 'text2');
+            CT.context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            
+            CT.drawText({
+                text: '<class="' + definedClass + '">' + text + '</class>',
+                x: 20,
+                y: 100,
+                boxWidth: 480 - 50
+            });
+            
+            CT.drawText({
+                text: '<class="subtitle1-light">' + subtitle1 + '</class>',
+                x: 20,
+                y: 270,
+                boxWidth: 330
+            });
+            
+            CT.drawText({
+                text: '<class="subtitle2-light">' + subtitle2 + '</class>',
+                x: 20,
+                y: 285,
+                boxWidth: 330
+            });
+            
+            putImage(context, 'quote-white.png', 225, 22);
+            //putImage(context, 'musica-logo-cinza.png', 381, 255); 
+            
+        }
+    });
+    
+    LetrilizarStyles.push({
+        name: 'quote-1',
+        draw: function(canvas, text, subtitle1, subtitle2) {
+            var context = canvas.getContext("2d");
+            
+            context.globalCompositeOperation = 'source-over';
+            
+            var CT = getCT(canvas, context);
+            
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
             var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 480, 'text1');
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,7 +176,8 @@ var LetrilizarStyles = LetrilizarStyles || [];
             });
             
             putImage(context, 'quote-1.png', 200, -10);
-            putImage(context, 'musica-logo-cinza.png', 381, 255);
+            //putImage(context, 'musica-logo-cinza.png', 381, 255);
+            
         }
     });
     
@@ -141,6 +187,8 @@ var LetrilizarStyles = LetrilizarStyles || [];
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context); 
+            
+            context.globalCompositeOperation = 'source-over';
             
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
             var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 470, 'text2');
@@ -171,7 +219,7 @@ var LetrilizarStyles = LetrilizarStyles || [];
             });
             
             putImage(context, 'quote-white.png', 225, 22);
-            putImage(context, 'musica-logo-cinza.png', 381, 255);            
+            //putImage(context, 'musica-logo-cinza.png', 381, 255);            
         }
     });
 
@@ -180,6 +228,8 @@ var LetrilizarStyles = LetrilizarStyles || [];
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context); 
+            
+            context.globalCompositeOperation = 'source-over';
             
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
             var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 470, 'text1-light');
@@ -210,7 +260,7 @@ var LetrilizarStyles = LetrilizarStyles || [];
             });
             
             putImage(context, 'quote-3.png', 190, 30);
-            putImage(context, 'musica-logo-cinza.png', 381, 255);            
+            //putImage(context, 'musica-logo-cinza.png', 381, 255);            
         }
     });
     
@@ -220,6 +270,8 @@ var LetrilizarStyles = LetrilizarStyles || [];
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context); 
+            
+            context.globalCompositeOperation = 'source-over';
             
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
             var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 470, 'text1-light-italic');
@@ -250,7 +302,7 @@ var LetrilizarStyles = LetrilizarStyles || [];
             });
             
             putImage(context, 'quote-3.png', 190, -15);
-            putImage(context, 'musica-logo-cinza.png', 381, 255);            
+            //putImage(context, 'musica-logo-cinza.png', 381, 255);            
         }
     });
     
@@ -261,6 +313,8 @@ var LetrilizarStyles = LetrilizarStyles || [];
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context);
+            
+            context.globalCompositeOperation = 'source-over';
             
             CT.context.clearRect(0, 0, canvas.width, canvas.height);
             var definedClass = LetrilizarUtils.fitText(CT, canvas, text, 10, 100, 480, 'classic-text');
