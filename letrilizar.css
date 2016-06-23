@@ -82,6 +82,10 @@
   animation: keyframes-letrilizar-bounce-in-up 0.5s ease-in;
 }
 
+.letrilizar-action-balloon--static {
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+}
 
 .letrilizar-action-balloon::after {
   content: '';
@@ -95,6 +99,10 @@
   margin-left: -3px;
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.letrilizar-action-balloon--static.letrilizar-action-balloon::after {
+  display: none;
 }
 
 .letrilizar-download-button,

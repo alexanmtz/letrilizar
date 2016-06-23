@@ -112,11 +112,13 @@ var ActionBalloon = {
 		
         if(type=='selection') {
         	parentEl.append(this.elTemplate.html());
+        	this.el = parentEl.find('.letrilizar-action-balloon');
         } else {
         	parentEl.empty().append(this.elTemplate.html());
+        	this.el = parentEl.find('.letrilizar-action-balloon');
+        	this.el.addClass('letrilizar-action-balloon--static');
+        	
         }
-        
-        this.el = parentEl.find('.letrilizar-action-balloon');
         
         this.el.find('.letrilizar-buttons').on('click', function() { 
             if (!that.previewIsOpen()) {
@@ -150,7 +152,6 @@ var ActionBalloon = {
     },
     floatAt: function(offset) {
         var that = this;
-        console.info(offset);
         this.el.offset(offset).css('display','block').addClass('letrilizar-action-balloon--showing');
         setTimeout(function() { that.el.removeClass('letrilizar-action-balloon--showing'); }, 500);
         return this;
@@ -203,7 +204,7 @@ var ActionBalloon = {
     },
     hide: function() {
         this.togglePreview(false);
-        this.el.fadeOut();
+        //this.el.fadeOut();
     },
     show: function() {
     	this.togglePreview(true);
