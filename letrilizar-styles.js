@@ -80,7 +80,7 @@ var LetrilizarStyles = LetrilizarStyles || [];
         }
         
         image.crossOrigin = "Anonymous";
-        image.src = Letrilizar.options.imageSrcPrefix + src;
+        image.src = 'images/' + src;
     };
     
     var setBackgroundColor = function(canvas, context, color) { 
@@ -257,7 +257,7 @@ var LetrilizarStyles = LetrilizarStyles || [];
     
     
     LetrilizarStyles.push({
-        name: 'classic',
+        name: '90-music',
         draw: function(canvas, text, subtitle1, subtitle2) {
             var context = canvas.getContext("2d");
             var CT = getCT(canvas, context);

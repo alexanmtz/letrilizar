@@ -10,14 +10,15 @@
 <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 <div class="container">
 
-<section class="letrilizar">
-
+<section>
 <div class="jumbotron">
 	<div class="row">
 	    <div class="col-md-6">
 	          <h1>Letrilizar</h1>
 	          <p>Transforme qualquer trecho da sua página em uma citação para salvar ou compartilhar</p>
 	          <p class="text-primary">Personalize com diferentes estilos e customizações!</p>
+	          <small>Com o Letrilizar, você pode gerar diferentes imagens com frases, letras e citações com diferentes estilos, prontos para compartilhar de diversas formas,
+	          	seja ela no facebook, salvando ou usando em seu site quando o usuário seleciona um texto!</small>
 	        
 	    </div>
 	    <div class="col-md-6">
@@ -30,6 +31,7 @@
 		<h3>Selecione os trechos abaixo e compartilhe!</h3>
 	</div>
 </div>
+<div class="letrilizar">
 <div class="row">
   <div class="col-lg-4">
     <div class="bs-component">
@@ -60,7 +62,8 @@ Living for today</p>
       </blockquote>
     </div>
   </div>
-  
+</div>  
+</div>
 </section>
 <div class="row">
 	<div class="col-lg-12">
@@ -96,8 +99,8 @@ Living for today</p>
   </div>
 </div>
 <div class='letrilizar-markupholder'>
-    <script type='text/template' id='letrilizar-template-action-ballon'>
-        <div class='letrilizar-action-ballon'>
+    <script type='text/template' id='letrilizar-template-action-balloon'>
+        <div class='letrilizar-action-balloon'>
             <span class='letrilizar-close-button'></span>
             <div class='letrilizar-preview'>
                 <canvas width='480' height='310'></canvas>
@@ -137,15 +140,26 @@ Living for today</p>
 <script type='text/javascript' src='letrilizar.js'></script>
 <script type='text/javascript'>
      $(function(){
- 		
-		//console.info($('#gerenarted-text').val());
-		Letrilizar.letrilizar({
+     	
+ 		// letrilizar pelo botao
+		
+		var letrilizarGenerator = new Letrilizando();
+		
+		//console.info(letrilizarGenerator);
+		
+		letrilizarGenerator.letrilizar({
 			triggerOn: '.generate-canvas-button'
 		});	
 		
-		Letrilizar.styleChooser();
+		letrilizarGenerator.styleChooser();
 		
-		//Letrilizar.letrilizar(); 
+		//letrilizar em selecao
+		
+		var letrilizarSelection = new Letrilizando();
+		
+		//console.info(letrilizarSelection);
+		
+		letrilizarSelection.letrilizar(); 
     });
 </script>
 </html>

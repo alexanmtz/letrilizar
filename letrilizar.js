@@ -1,11 +1,12 @@
 var Letrilizar = {
+	balloonInstance: null,
     defaultOptions: {
         el: $('.letrilizar'),
         sharingText: 'Estamos postando a foto no seu facebook...',
         successText: 'Sua foto foi postada. É só curtir!',
         errorText: 'Ops... ocorreu um erro ao postar a foto',
-        subtitle1: 'Letrilizar',
-        subtitle2: 'GLOBOCOM.GITHUB.IO/LETRILIZAR/',
+        subtitle1: 'letrilizar',
+        subtitle2: 'letrilizar.com',
         imageSrcPrefix: 'images/',
         formatText: true,
         maxChars: 800,
@@ -13,13 +14,12 @@ var Letrilizar = {
     },
     letrilizar: function(options) {
         this.options = $.extend({}, this.defaultOptions, options);
-        this.el = this.options.el;
-        this.el.addClass('letrilizar-letrilization-area');
         this.initialize();
     },
     initialize: function() {
     	var that = this;
         if(this.options.triggerOn == 'selection') {
+        	this.options.el.addClass('letrilizar-letrilization-area');
         	this.handleSelection();
         } else {
         	$(this.options.triggerOn).on('click', function(e){
@@ -32,10 +32,12 @@ var Letrilizar = {
     newCanvasOnElement: function(){
     	var txtGenerated = $('#generated-text').val();
     	var element = $('.letrilizar-canvas-content-image');
-    	ActionBaloon.initialize(element);
-    	ActionBaloon.text = txtGenerated;
-    	ActionBaloon.draw(txtGenerated);
-    	ActionBaloon.togglePreview(true);
+    	this.balloonInstance.initialize(element);
+    	this.balloonInstance.letra = this;
+    	this.balloonInstance.text = txtGenerated;
+    	this.balloonInstance.draw(txtGenerated);
+    	this.balloonInstance.show(true);
+    	this.balloonInstance.togglePreview(true);
     },
     styleChooser: function() {
     	var that = this;
@@ -48,19 +50,20 @@ var Letrilizar = {
 		}
 		
 		$('#change-style-button').append(stylesContent).find('button').on('click', function(e){
-			ActionBaloon.chooseStyle($(e.target).attr('data-index'));
-			ActionBaloon.togglePreview(true);
+			that.balloonInstance.chooseStyle($(e.target).attr('data-index'));
+			that.balloonInstance.togglePreview(true);
 			return false;
 		});
     },
     handleSelection: function() {
     	var that = this;
-    	ActionBaloon.initialize(this.el);
+    	this.balloonInstance.initialize(this.options.el, 'selection');
+    	this.balloonInstance.letra = this;
         LetrilizarFacebookShare.initialize();
         
-        this.el.on('mouseup', function(e) {
-            if (ActionBaloon.previewIsOpen()) {
-                ActionBaloon.hide();
+        this.options.el.on('mouseup', function(e) {
+            if (that.balloonInstance.previewIsOpen()) {
+                that.balloonInstance.hide();
                 return;
             }
             
@@ -68,7 +71,7 @@ var Letrilizar = {
             if (selection.text) {
                 that.onSelect(e, selection);
             } else {
-                ActionBaloon.hide();
+                that.balloonInstance.hide();
             }
         });
         
@@ -76,34 +79,44 @@ var Letrilizar = {
     },
     onSelect: function(e, selection) {
         var offset = {};
-        var parentOffset = this.el.offset();
+        var parentOffset = this.options.el.offset();
         var scrollTop = $(window).scrollTop();
         var scrollLeft = $(window).scrollLeft();
         
-        offset.top = selection.top - parentOffset.top + 55;
-        offset.left = selection.left - parentOffset.left;
+        //offset.top = (selection.top + parentOffset.top);
+        //offset.left = (selection.left + parentOffset.left);
+        
+        offset.top = selection.top;
+        offset.left = selection.left;
         
         // selection position is relative to screen, so
         // is needed to add scroll displacement
         offset.top += scrollTop;
         offset.left += scrollLeft;
-        
-        ActionBaloon.text = selection.formatedText;
-        ActionBaloon.floatAt(offset)
+        this.balloonInstance.text = selection.formatedText;
+        this.balloonInstance.floatAt(offset);
     }
 };
 
 
-var ActionBaloon = {
-    el: $('#letrilizar-template-action-ballon'),
+var ActionBalloon = {
+    elTemplate: $('#letrilizar-template-action-balloon'),
+    el: null,
     text: null,
     style: null,
-    initialize: function(parentEl) {
+    letra: null,
+    canvas: null,
+    initialize: function(parentEl, type) {
         var that = this;
+		var type = type || '';
+		
+        if(type=='selection') {
+        	parentEl.append(this.elTemplate.html());
+        } else {
+        	parentEl.empty().append(this.elTemplate.html());
+        }
         
-        parentEl.parent().empty().append(ActionBaloon.el.html());
-        
-        this.el = $('.letrilizar-action-ballon');
+        this.el = parentEl.find('.letrilizar-action-balloon');
         
         this.el.find('.letrilizar-buttons').on('click', function() { 
             if (!that.previewIsOpen()) {
@@ -137,18 +150,13 @@ var ActionBaloon = {
     },
     floatAt: function(offset) {
         var that = this;
-        this.el.css(offset).css('display','block').addClass('letrilizar-action-ballon--showing');
-        setTimeout(function() { that.el.removeClass('letrilizar-action-ballon--showing'); }, 500);
+        console.info(offset);
+        this.el.offset(offset).css('display','block').addClass('letrilizar-action-balloon--showing');
+        setTimeout(function() { that.el.removeClass('letrilizar-action-balloon--showing'); }, 500);
         return this;
     },
     togglePreview: function(toggle) {
-        
-        if(Letrilizar.options['triggerOn'] == 'selection') {
-        	this.el.toggleClass('letrilizar--active-balloon',toggle);
-        } else {
-        	this.el.toggleClass('letrilizar--active',toggle);
-        }
-        
+    	this.el.toggleClass('letrilizar--active',toggle);
         this.draw();
     },
     previewIsOpen: function() {
@@ -168,14 +176,10 @@ var ActionBaloon = {
     },
     draw: function(text) {
         var canvas = this.el.find('canvas');
-        var subtitle1 = Letrilizar.options['subtitle1'];
-        var subtitle2 = Letrilizar.options['subtitle2'];
+        var subtitle1 = this.letra.options['subtitle1'];
+        var subtitle2 = this.letra.options['subtitle2'];
         canvasText = text || this.text;
-        if(Letrilizar.options['triggerOn'] == 'selection') {
-        	this.el.css('display','block').addClass('letrilizar-action-ballon--showing');
-        } else {
-        	this.el.css('display','block').addClass('letrilizar-action-ballon--showing--all');
-        }
+        
         this.style.draw(canvas[0], canvasText, subtitle1, subtitle2);
         this.canvas = canvas;
     },
@@ -184,16 +188,16 @@ var ActionBaloon = {
     },
     share: function() {
         var that = this;
-        this.changeStatus(Letrilizar.options['sharingText']);
+        this.changeStatus(this.letra.options['sharingText']);
         
         LetrilizarFacebookShare.share({
             canvas: this.canvas[0], 
             message: '',
             successCallback: function() {
-                that.changeStatus(Letrilizar.options['successText']);
+                that.changeStatus(that.options['successText']);
             },
             errorCallback: function() {
-                that.changeStatus(Letrilizar.options['errorText']);
+                that.changeStatus(that.options['errorText']);
             }
         });
     },
@@ -206,3 +210,9 @@ var ActionBaloon = {
         this.el.fadeIn();
     }
 }
+
+var Letrilizando = function() {
+	this.current = Object.create(Letrilizar);
+	this.current.balloonInstance = Object.create(ActionBalloon);; 
+	return this.current;
+};
