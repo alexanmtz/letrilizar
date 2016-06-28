@@ -60,7 +60,7 @@ var LetrilizarTemplates = LetrilizarTemplates || [];
                        {fontColor: "#fff"}));
         
         var subtitle2 = {
-            fontFamily: "ProximaNova",
+            fontFamily: "Georgia",
             fontSize: "13px",
             fontWeight: "bold",
             fontColor: "#666"   
@@ -109,25 +109,25 @@ var LetrilizarTemplates = LetrilizarTemplates || [];
             CT.drawText({
                 text: '<class="' + definedClass + '">' + text + '</class>',
                 x: 20,
-                y: 100,
-                boxWidth: 480 - 50
+                y: 250,
+                boxWidth: 430
             });
             
             CT.drawText({
                 text: '<class="subtitle1-light">' + subtitle1 + '</class>',
                 x: 20,
-                y: 270,
+                y: 50,
                 boxWidth: 330
             });
             
             CT.drawText({
                 text: '<class="subtitle2-light">' + subtitle2 + '</class>',
                 x: 20,
-                y: 285,
+                y: 65,
                 boxWidth: 330
             });
             
-            putImage(context, 'quote-white.png', 225, 22);
+            //putImage(context, 'quote-white.png', 225, 22);
             //putImage(context, 'musica-logo-cinza.png', 381, 255); 
             
         }

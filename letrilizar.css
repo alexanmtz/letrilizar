@@ -1,3 +1,12 @@
+/*
+ * delete when facebook share its fully working
+ */
+
+.letrilizar-share-button {
+	display: none;
+}
+
+
 @-webkit-keyframes keyframes-letrilizar-bounce-in-up {
   0% {
     opacity: 0;

@@ -6,7 +6,7 @@ var Letrilizar = {
         sharingText: 'Estamos postando a foto no seu facebook...',
         successText: 'Sua foto foi postada. É só curtir!',
         errorText: 'Ops... ocorreu um erro ao postar a foto',
-        subtitle1: 'letrilizar',
+        subtitle1: 'gerado no',
         subtitle2: 'letrilizar.com',
         imageSrcPrefix: 'images/',
         formatText: true,
