@@ -2,7 +2,7 @@
  * delete when facebook share its fully working
  */
 
-.letrilizar-share-button {
+.letrilizar--active .letrilizar-share-button {
 	display: none;
 }
 
