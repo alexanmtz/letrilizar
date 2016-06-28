@@ -1,5 +1,6 @@
 var Letrilizar = {
 	balloonInstance: null,
+	customImage: null,
     defaultOptions: {
         el: $('.letrilizar'),
         sharingText: 'Estamos postando a foto no seu facebook...',
@@ -23,8 +24,8 @@ var Letrilizar = {
         	this.options.el.addClass('letrilizar-letrilization-area');
         	this.handleSelection();
         } else {
+        	this.changeImage();
         	$(this.options.triggerOn).on('click', function(e){
-        		that.changeImage();
         		that.newCanvasOnElement();
         		return false;	
         	});
@@ -39,9 +40,17 @@ var Letrilizar = {
     	this.balloonInstance.letra = this;
     	this.balloonInstance.text = txtGenerated;
     	this.balloonInstance.style = LetrilizarStyles[0];
+    	
     	this.balloonInstance.draw(txtGenerated);
+    	
+    	var ctx = this.balloonInstance.canvas[0].getContext("2d");
+    	
     	this.balloonInstance.show(true);
     	this.balloonInstance.togglePreview(true);
+    	
+    	if(this.customImage) {
+    		ctx.drawImage(this.customImage, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    	}
     	
     },
     styleChooser: function() {
@@ -105,7 +114,7 @@ var Letrilizar = {
     	var that = this;
     	var balloon = this.balloonInstance;
     	$(this.options.changeImage).on("change", function(e) {
-	    	var ctx = balloon.canvas[0].getContext("2d");
+	    	//var ctx = balloon.canvas[0].getContext("2d");
 	    	
 			var reader = new FileReader();
 			var file = e.target.files[0];
@@ -116,7 +125,7 @@ var Letrilizar = {
 				//ctx.canvas.width = img.width;
 				//ctx.canvas.height = img.height;
 				// draw image
-				ctx.drawImage(img, 0, 0, ctx.canvas.width, ctx.canvas.height);
+				that.customImage = img;
 				
 			}
 			// this is to setup loading the image
@@ -125,8 +134,6 @@ var Letrilizar = {
 			}
 			// this is to read the file
 			reader.readAsDataURL(file); 
-
-	    	
 
 		});
     }
