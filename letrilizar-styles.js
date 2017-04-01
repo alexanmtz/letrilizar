@@ -109,7 +109,7 @@ var LetrilizarTemplates = LetrilizarTemplates || [];
             CT.drawText({
                 text: '<class="' + definedClass + '">' + text + '</class>',
                 x: 20,
-                y: 250,
+                y: 200,
                 boxWidth: 430
             });
             
